@@ -10,21 +10,19 @@ var app = express();
 apiProxy = httpProxy.createProxyServer();
 app.get('/',(req, res) => {res.sendFile(__dirname + '/index.html');});
 
-app.get("/url/", async (req, res) => {
-    // const url = "http://horror-forms.bdoestech.com/movies-brendan";
+app.get("/proxy/", rateLimitMiddleware, async (req, res) => {
     const {url} = req.query;
 
-    console.log(url);
+    // console.log(url);
     await fetch(url)
     .then(response => {
         if (!response.ok) {throw new Error('Network response was not ok');}
         return response.json();
     })
     .then(data => {
-        console.log('Data received for Darayus');
-        console.log(data);  
+        console.log('Data received');
+        res.send(data);
     })
-    // apiProxy.web(req, res, {target: "http://horror-forms.bdoestech.com/movies-brendan"});
 });
 
 
